@@ -25,3 +25,5 @@ jobs:
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Test with pytest
       run: python SteamMarketCandleStick.py
+    - name: Save data
+      run: git add . && git commit -m "Modified files"
