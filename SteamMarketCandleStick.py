@@ -38,8 +38,3 @@ else:
     if float(current_price) > float(df.loc[(df['date'] == current_day) & (df['time'] == current_time)]['high']):
         df.loc[np.logical_and(df['date'] == current_day, df['time'] == current_time), 'high'] = current_price
         df.to_csv("data.csv", index=False)
-
-
-#mudar pra ler o ultimo registro do db pra ver se é a mesma hora
-#senão é criar uma linha com a hora nova
-#se for fazer os checks
