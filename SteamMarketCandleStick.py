@@ -28,18 +28,14 @@ if df[(df['date'] == current_day) & (df['time'] == current_time)].empty:
     d2 = {'date': current_day, 'time': current_time, 'open': current_price, 'close': 0, 'high': current_price, 'low': current_price}
     df2 = pd.DataFrame(d2, index=[0])
     df = pd.concat([df, df2])
+    df.to_csv("data.csv", index=False)
     
 else:
     # check if the current_price is lower then the low value for the current_hour
     if float(current_price) < float(df.loc[(df['date'] == current_day) & (df['time'] == current_time)]['low']):
         df.loc[np.logical_and(df['date'] == current_day, df['time'] == current_time), 'low'] = current_price
-        low = current_price
+        df.to_csv("data.csv", index=False)
     # check if the current_price is higher then the high value for the current_hour
     if float(current_price) > float(df.loc[(df['date'] == current_day) & (df['time'] == current_time)]['high']):
         df.loc[np.logical_and(df['date'] == current_day, df['time'] == current_time), 'high'] = current_price
         df.to_csv("data.csv", index=False)
-
-
-#mudar pra ler o ultimo registro do db pra ver se é a mesma hora
-#senão é criar uma linha com a hora nova
-#se for fazer os checks
