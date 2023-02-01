@@ -16,12 +16,16 @@ current_day = now.strftime("%Y-%m-%d")
 current_time = now.strftime("%H")
 
 
-
+df.drop_duplicates(subset=['date', 'time'], keep='first', inplace=True)
 if df[(df['date'] == current_day) & (df['time'] == current_time)].empty:
     # check if there is a previous row with a different time
     previous_row = df[(df['date'] == current_day) & (df['time'] != current_time)].tail(1)
     if not previous_row.empty:
         previous_row.loc[:,'close'] = current_price
+        if current_price < previous_row['low'].values[0]:
+            previous_row.loc[:, 'low'] = current_price
+        if current_price > previous_row['high'].values[0]:
+            previous_row.loc[:, 'high'] = current_price
         df.update(previous_row)
         df.to_csv("data.csv", index=False)
     # add the new row to the frame
@@ -39,3 +43,5 @@ else:
     if float(current_price) > float(df.loc[(df['date'] == current_day) & (df['time'] == current_time)]['high']):
         df.loc[np.logical_and(df['date'] == current_day, df['time'] == current_time), 'high'] = current_price
         df.to_csv("data.csv", index=False)
+
+
