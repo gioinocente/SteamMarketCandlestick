@@ -12,14 +12,14 @@ data = json.loads(response.text)
 current_price = data["lowest_price"].replace("R$ ","").replace(",", ".")
 
 now = datetime.now()
-current_day = now.strftime("%Y-%m-%d")
-current_time = now.strftime("%H")
+current_time = now.strftime("%Y-%m-%d %H:00:00")
 
 
-df.drop_duplicates(subset=['date', 'time'], keep='first', inplace=True)
-if df[(df['date'] == current_day) & (df['time'] == current_time)].empty:
+
+df.drop_duplicates(subset=['time'], keep='first', inplace=True)
+if df[(df['time'] == current_time)].empty:
     # check if there is a previous row with a different time
-    previous_row = df[(df['date'] == current_day) & (df['time'] != current_time)].tail(1)
+    previous_row = df[(df['time'] != current_time)].tail(1)
     if not previous_row.empty:
         previous_row.loc[:,'close'] = current_price
         if float(current_price) < float(previous_row['low'].values[0]):
@@ -29,19 +29,19 @@ if df[(df['date'] == current_day) & (df['time'] == current_time)].empty:
         df.update(previous_row)
         df.to_csv("data.csv", index=False)
     # add the new row to the frame
-    d2 = {'date': current_day, 'time': current_time, 'open': current_price, 'close': 0, 'high': current_price, 'low': current_price}
+    d2 = {'time': current_time, 'open': current_price, 'close': 0, 'high': current_price, 'low': current_price}
     df2 = pd.DataFrame(d2, index=[0])
     df = pd.concat([df, df2])
     df.to_csv("data.csv", index=False)
     
 else:
     # check if the current_price is lower then the low value for the current_hour
-    if float(current_price) < float(df.loc[(df['date'] == current_day) & (df['time'] == current_time)]['low']):
-        df.loc[np.logical_and(df['date'] == current_day, df['time'] == current_time), 'low'] = current_price
+    if float(current_price) < float(df.loc[df['time'] == current_time]['low']):
+        df.loc[df['time'] == current_time, 'low'] = current_price
         df.to_csv("data.csv", index=False)
     # check if the current_price is higher then the high value for the current_hour
-    if float(current_price) > float(df.loc[(df['date'] == current_day) & (df['time'] == current_time)]['high']):
-        df.loc[np.logical_and(df['date'] == current_day, df['time'] == current_time), 'high'] = current_price
+    if float(current_price) > float(df.loc[df['time'] == current_time]['high']):
+        df.loc[df['time'] == current_time, 'high'] = current_price
         df.to_csv("data.csv", index=False)
 
 
