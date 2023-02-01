@@ -26,13 +26,13 @@ jobs:
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Test with pytest
       run: python SteamMarketCandleStick.py
-    - name: Commit files # transfer the new html files back into the repository
+    - name: Commit files
       run: |
-        git config --local user.name "gioinocente"
-        git add ./docs
-        git commit -m "update"
-    - name: Push changes # push the output folder to your repo
+        git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        git commit -a -m "Add changes"
+    - name: Push changes
       uses: ad-m/github-push-action@master
       with:
-        github_token: ${{ secrets.token-steam-candlestick }}
-        force: true
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: ${{ github.ref }}
