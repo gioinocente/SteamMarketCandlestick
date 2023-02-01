@@ -22,9 +22,9 @@ if df[(df['date'] == current_day) & (df['time'] == current_time)].empty:
     previous_row = df[(df['date'] == current_day) & (df['time'] != current_time)].tail(1)
     if not previous_row.empty:
         previous_row.loc[:,'close'] = current_price
-        if current_price < previous_row['low'].values[0]:
+        if float(current_price) < float(previous_row['low'].values[0]):
             previous_row.loc[:, 'low'] = current_price
-        if current_price > previous_row['high'].values[0]:
+        if float(current_price) > float(previous_row['high'].values[0]):
             previous_row.loc[:, 'high'] = current_price
         df.update(previous_row)
         df.to_csv("data.csv", index=False)
