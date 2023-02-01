@@ -26,16 +26,13 @@ jobs:
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Test with pytest
       run: python SteamMarketCandleStick.py
-    - name: check for changes
-      run: git status
-    - name: stage changed files
+    - name: Commit files
       run: |
-        git config user.name github-actions
-        git config user.email github-actions@github.com
-        git add .
-    - name: commit changed files
-      run: git commit -m "Auto updating TODO.txt"
-    - name: fetch from master
-      run: git fetch origin master
-    - name: push code to master
-      run: git push origin HEAD:master
+        git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        git commit -a -m "Add changes"
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: ${{ github.ref }}
