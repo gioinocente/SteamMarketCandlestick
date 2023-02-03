@@ -6,6 +6,7 @@ name: Python application
 on:
   schedule:
     - cron: '* * * * *'
+  push:
     
 jobs:
   getData:
