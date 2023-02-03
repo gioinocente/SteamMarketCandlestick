@@ -46,7 +46,7 @@ else:
         df.to_csv("data.csv", index=False)
 
 df['time'] = pd.to_datetime(df['time'])
-df = df.drop(df.index[-1])
 df.set_index('time', inplace=True)
+df = df.drop(df.index[-1])
 mpf.plot(df,type='candle',style='charles', savefig='plot.png')
 
