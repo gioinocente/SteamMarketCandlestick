@@ -3,6 +3,7 @@ import numpy as np
 import requests
 import json
 from datetime import datetime
+import mplfinance as mpf
 
 df = pd.read_csv("data.csv")
 url = "https://steamcommunity.com/market/priceoverview/?country=DE&currency=7&appid=730&market_hash_name=AK-47%20%7C%20Slate%20%28Field-Tested%29"
@@ -44,4 +45,8 @@ else:
         df.loc[df['time'] == current_time, 'high'] = current_price
         df.to_csv("data.csv", index=False)
 
+df['time'] = pd.to_datetime(df['time'])
+df = df.drop(df.index[-1])
+df.set_index('time', inplace=True)
+mpf.plot(df,type='candle',style='charles', savefig='plot.png')
 
