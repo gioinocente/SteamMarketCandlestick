@@ -51,6 +51,7 @@ df['open'] = pd.to_numeric(df['open'])
 df['high'] = pd.to_numeric(df['high'])
 df['low'] = pd.to_numeric(df['low'])
 df.set_index('time', inplace=True)
+df = df.tail(25)
 df = df.drop(df.index[-1])
 mpf.plot(df,type='candle',style='charles', savefig='plot.png')
 
