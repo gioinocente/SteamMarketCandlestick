@@ -44,7 +44,7 @@ else:
     if float(current_price) > float(df.loc[df['time'] == current_time]['high']):
         df.loc[df['time'] == current_time, 'high'] = current_price
         df.to_csv("data.csv", index=False)
-df.index[-1]['close'] = float(current_price)
+df.loc[df.index[-1], "close"] = float(current_price)
 
 df['time'] = pd.to_datetime(df['time'])
 df['close'] = pd.to_numeric(df['close'])
