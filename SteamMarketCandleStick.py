@@ -44,6 +44,7 @@ else:
     if float(current_price) > float(df.loc[df['time'] == current_time]['high']):
         df.loc[df['time'] == current_time, 'high'] = current_price
         df.to_csv("data.csv", index=False)
+df.index[-1]['close'] = float(current_price)
 
 df['time'] = pd.to_datetime(df['time'])
 df['close'] = pd.to_numeric(df['close'])
@@ -51,7 +52,6 @@ df['open'] = pd.to_numeric(df['open'])
 df['high'] = pd.to_numeric(df['high'])
 df['low'] = pd.to_numeric(df['low'])
 df.set_index('time', inplace=True)
-df = df.tail(25)
-df = df.drop(df.index[-1])
+df = df.tail(24)
 mpf.plot(df,type='candle',style='charles', savefig='plot.png')
 
